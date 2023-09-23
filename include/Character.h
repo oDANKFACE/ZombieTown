@@ -10,10 +10,21 @@
 class Character {
 public:
     Character(const std::string& name, int hp, int energy);
+
+// NAME *******************************************
+    std::string getName() const;
+    void setName(std::string newName);
+
+// HP *********************************************
     int getHP() const;
     void setHP(int newHP);
+    void changeHP(int changeVal);
+
+// ENERGY *****************************************
     int getEnergy() const;
     void setEnergy(int newEnergy);
+    void changeEnergy(int changeVal);
+
 private:
     std::string name;
     int hp;
