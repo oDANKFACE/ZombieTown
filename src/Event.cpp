@@ -4,7 +4,14 @@
 
 #include "../include/Event.h"
 
-void Event::generateEvent(const std::string &description, const std::vector<Choice> &choicesList) {
-    eventDescription = description;
-    choices = choicesList;
+Event::Event(const int id, const std::string description) : id(id), eventDescription(description) {}
+
+void Event::addChoice(Event::Choice choice) { choices.push_back(choice); }
+
+int Event::getId() { return id; }
+
+std::string Event::getDescription() { return eventDescription; }
+
+std::vector<Event::Choice> Event::getChoices() {
+    return choices;
 }

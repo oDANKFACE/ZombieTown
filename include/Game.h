@@ -7,30 +7,47 @@
 
 #include <vector>
 #include "Character.h"
+#include "EventManager.h"
+#include "Event.h"
+
+// ******************************************************************************|
+// CLASS Game
+// Used to run the game.
+//      Manages game state, gameplay loop, and player input.
+// ******************************************************************************|
 
 class Game {
 public:
     Game();
     void run();
 
+    // Deal with the in-game clock
     int getTime() const;
     void setTime(int addedTime);
+
+    // Starts Character Creation segment
     void createCharacter();
 
-    void generateStatsDisplay(int hp, int energy) const; // Update the display: new HP, Energy, time of day, etc.
-    int getPlayerChoiceOld();
+    // Update the display with new HP, Energy, time of day, etc.
+    void generateStatsDisplay(int hp, int energy) const;
 
+    // Returns the decision (int) the player makes from the list of choices.
+    // Uses inputValidator.
+    int getPlayerDecision(const std::string prompt, std::vector<Event::Choice>& choices);
 
-    int getPlayerDecision(const std::string prompt, std::vector<std::string>& choices);
-
+    // Validates the input from the player.
+    // Used in getPlayerDecision.
     bool inputValidator(int numChoices, int input);
 private:
     int currentTime;
     int addedTime;
     int choiceMaster;
+    int currentEventId = -1;
     Character playerCharacter;
     std::string prompt;
-    std::vector<std::string> choices;
+    std::vector<Event::Choice> choices;
+    EventManager eventManager;
+    Event currentEvent;
 };
 
 #endif //ZOMBIETOWN_GAME_H

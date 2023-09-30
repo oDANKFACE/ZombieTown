@@ -2,11 +2,11 @@
 // Created by Darien on 9/21/2023.
 //
 
-#include "../include/Game.h"
 #include <iostream>
 #include <vector>
 #include <limits>
 #include <cctype>
+#include "../include/Game.h"
 
 
 Game::Game() : playerCharacter("ErrNameXxX", 0, 0) {
@@ -32,20 +32,20 @@ void Game::createCharacter() {
     std::cout << std::endl << "Hello " << newName << "!" << std::endl << std::endl;
 
     // Write perk prompt and options
-    prompt = "Now you must choose a starting perk:";
-    choices = {
-            "Wired (+5 Max Energy)",
-            "Swoll (+20 Max HP)"
-    };
-    perkChoice = getPlayerDecision(prompt, choices);
-
-    if (perkChoice == 1) {
-        std::cout << "You have chosen to be wired. You feel more energized." << std::endl;
-        playerCharacter.changeEnergy(5);
-    } else if (perkChoice == 2) {
-        std::cout << "You have chosen to be swoll. You feel stronger." << std::endl;
-        playerCharacter.changeHP(20);
-    }
+//    prompt = "Now you must choose a starting perk:";
+//    choices = {
+//            "Wired (+5 Max Energy)",
+//            "Swoll (+20 Max HP)"
+//    };
+//    perkChoice = getPlayerDecision(prompt, choices);
+//
+//    if (perkChoice == 1) {
+//        std::cout << "You have chosen to be wired. You feel more energized." << std::endl;
+//        playerCharacter.changeEnergy(5);
+//    } else if (perkChoice == 2) {
+//        std::cout << "You have chosen to be swoll. You feel stronger." << std::endl;
+//        playerCharacter.changeHP(20);
+//    }
 }
 
 bool Game::inputValidator(int numChoices, int input) {
@@ -72,14 +72,14 @@ void Game::generateStatsDisplay(int hp, int energy) const {
     std::cout << "                                          Current Time: " << currentTime << std::endl;
 }
 
-int Game::getPlayerDecision(const std::string prompt, std::vector<std::string> &choices) {
+int Game::getPlayerDecision(const std::string prompt, std::vector<Event::Choice> &choices) {
     bool validInput;
     int decision;
 
     // Display prompt and decisions
     std::cout << prompt << std::endl;
     for (int i = 0; i < choices.size(); ++i) {
-        std::cout << i + 1 << ". " << choices[i] << std::endl;
+        std::cout << i + 1 << ". " << choices[i].description << std::endl;
     }
     std::cout << std::endl;
     // Ask for decision and validate
@@ -94,12 +94,12 @@ int Game::getPlayerDecision(const std::string prompt, std::vector<std::string> &
 
     } while (!validInput);
 
-    return decision;
+    return decision - 1;
 }
-
 
 void Game::run() {
     bool isRunning = true;
+    eventManager.initializeEvents();
     createCharacter();
 
 
@@ -114,107 +114,41 @@ void Game::run() {
         // Display updated stats
         generateStatsDisplay(playerCharacter.getHP(), playerCharacter.getEnergy());
 
-        prompt = "What will you do now?";
-        choices = {
-                "Increase HP",
-                "Decrease HP",
-                "Increase Energy",
-                "Decrease Energy"
-        };
-
-
-        // Offer choices to player
+        currentEvent = eventManager.selectNextEvent(currentEventId);
+        currentEventId = currentEvent.getId();
+        prompt = currentEvent.getDescription();
+        choices = currentEvent.getChoices();
 
         choiceMaster = getPlayerDecision(prompt, choices);
+
+        playerCharacter.changeHP(choices[choiceMaster].hpEffect);
+        playerCharacter.changeEnergy(choices[choiceMaster].energyEffect);
+        setTime(choices[choiceMaster].timeEffect);
+
         std::cout << std::endl << std::endl << std::endl;
 
-        if (choiceMaster == 1) {
-            std::cout << "You have chosen to increase HP" << std::endl;
-            playerCharacter.changeHP(20);
-        } else if (choiceMaster == 2) {
-            std::cout << "You have chosen to decrease HP" << std::endl;
-            playerCharacter.changeHP(-20);
-        } else if (choiceMaster == 3) {
-            std::cout << "You have chosen to increase energy" << std::endl;
-            playerCharacter.changeEnergy(2);
-        } else if (choiceMaster == 4) {
-            std::cout << "You have chosen to decrease energy" << std::endl;
-            playerCharacter.changeEnergy(-2);
-        }
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Needs Implementing ***********************************************************************************
-            // Currently doesn't work, because 0 is an invalid input
-            // Gonna have to include a vector of "hidden inputs"
-        else if (choiceMaster == 0) {
-            std::cout << "Goodbye" << std::endl;
-            isRunning = false;
-        } else {
-            std::cout << "What?" << std::endl;
-        }
-
-
-
-        // Update stats
-
-        if (addedTime == 0) {
-            addedTime = 1;
-        }
-
-        setTime(addedTime);
 
         // Describe resulting status (check for death)
 
-        if (playerCharacter.getHP() <= 0) {
-            std::cout << "YOU HAVE DIED" << std::endl;
-            std::cout << std::endl;
-            prompt = "Try again?";
-            choices = {
-                    "Yes",
-                    "No"
-            };
-
-            choiceMaster = getPlayerDecision(prompt, choices);
-            if (choiceMaster == 1) {
-                std::cout << "Here we go again!" << std::endl;
-                createCharacter();
-                currentTime = 0;
-            } else if (choiceMaster == 2) {
-                std::cout << "Until next time!" << std::endl;
-                isRunning = false;
-            }
+        if (playerCharacter.getHP() <= 0 || playerCharacter.getEnergy() <= 0) {
+            std::cout << "YOU HAVE DIED... or ran out of energy I guess" << std::endl;
+            isRunning = false;
+//            std::cout << std::endl;
+//            prompt = "Try again?";
+//            choices = {
+//                    "Yes",
+//                    "No"
+//            };
+//
+//            choiceMaster = getPlayerDecision(prompt, choices);
+//            if (choiceMaster == 1) {
+//                std::cout << "Here we go again!" << std::endl;
+//                createCharacter();
+//                currentTime = 0;
+//            } else if (choiceMaster == 2) {
+//                std::cout << "Until next time!" << std::endl;
+//                isRunning = false;
+//            }
 
         }
 

@@ -7,6 +7,13 @@
 
 #include <string>
 
+// ******************************************************************************|
+// CLASS Character
+// Represents the playable character.
+//      Manages character info and status.
+// ******************************************************************************|
+
+
 class Character {
 public:
     Character(const std::string& name, int hp, int energy);
