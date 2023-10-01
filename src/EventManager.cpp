@@ -9,11 +9,15 @@ EventManager::EventManager() : rng(std::random_device()()) {
     initializeEvents();
 }
 
-void EventManager::loadEvents() {
-    // Placeholder, as mentioned in EventManager.h
-}
+//void EventManager::loadEvents() {
+//      // Placeholder for loading external JSON files using
+//      // a new library I found: nlohmann/json
+//      // found here: <https://github.com/nlohmann/json>
+//}
 
 void EventManager::initializeEvents() {
+
+
 
     Event event1(1, "You find an abandoned car");
     event1.addChoice(Event::Choice(0, "Sleep in the car", 4, 0, 5));

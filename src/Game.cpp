@@ -131,7 +131,7 @@ void Game::run() {
         // Describe resulting status (check for death)
 
         if (playerCharacter.getHP() <= 0 || playerCharacter.getEnergy() <= 0) {
-            std::cout << "YOU HAVE DIED... or ran out of energy I guess" << std::endl;
+            std::cout << "YOU HAVE DIED... or run out of energy I guess" << std::endl;
             isRunning = false;
 //            std::cout << std::endl;
 //            prompt = "Try again?";

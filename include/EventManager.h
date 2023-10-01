@@ -11,10 +11,9 @@
 // ******************************************************************************|
 // CLASS EventManager
 // Manages the in-game encounters.
-//      I'm still trying to implement this class and figure out how it works. My
-//      current understanding is that it will be used within Game.cpp to load
-//      events from an external file, create event objects, and give event info
-//      to Game.
+//      Loads events from external file
+//      Selects the next event based on previous event details, location,
+//      and game state
 // ******************************************************************************|
 
 class EventManager {
@@ -22,11 +21,7 @@ public:
     // Calls the initializeEvents method. Will call loadEvents instead once fully developed
     EventManager();
 
-    // Placeholder for loading event data from an external JSON file.
-    // Populates events list
-    void loadEvents();
-
-    // Temporary event loader, adds 3 hardcoded events to events list
+    // For loading event data from an external file.
     void initializeEvents();
 
     // Returns a new event given the previous event's id.
