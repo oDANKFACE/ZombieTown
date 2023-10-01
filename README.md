@@ -5,7 +5,7 @@ first dive into C++. My goal was to learn the basics of C++ and then double down
 would have no idea how to tackle, and that's how I landed on this textual interactive project. The project pushed me to
 constantly run into scenarios that I had no idea how to approach, and then begin the process of digging for answers.
 
-[Software Demo Video](https://youtu.be/YSasJaWvzRA)
+[Software Demo Video](https://youtu.be/y8ZJlDAM7vo)
 
 # Development Environment
 
